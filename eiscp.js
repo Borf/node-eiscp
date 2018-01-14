@@ -52,9 +52,11 @@ function eiscp_packet(data) {
 function eiscp_packet_extract(packet) {
     /*
       Exracts message from eISCP packet
-      Strip first 18 bytes and last 3 since that's only the header and end characters
+      Read out the packet length from the header and trim
     */
-    return packet.toString('ascii', 18, packet.length - 3);
+    var length = packet.readInt32BE(8);
+    var subData = packet.toString('ascii', 18, 18+length-2).trim();
+    return subData;
 }
 
 function iscp_to_command(iscp_message) {
@@ -82,6 +84,8 @@ function iscp_to_command(iscp_message) {
                 // It's a range so we need to convert args from hex to decimal
                 result.argument = parseInt(value, 16);
             }
+            else
+                result.argument = value;
         }
     });
 
@@ -369,28 +373,32 @@ self.connect = function (options) {
 	}).
 
 	on('data', function (data) {
+        while(data != "")
+        {
+            var iscp_message = eiscp_packet_extract(data),
+                result = iscp_to_command(iscp_message);
 
-		var iscp_message = eiscp_packet_extract(data),
-			result = iscp_to_command(iscp_message);
+            result.iscp_command = iscp_message;
+            result.host  = config.host;
+            result.port  = config.port;
+            result.model = config.model;
 
-		result.iscp_command = iscp_message;
-        result.host  = config.host;
-        result.port  = config.port;
-        result.model = config.model;
+            self.emit('debug', util.format("DEBUG (received_data) Received data from %s:%s - %j", config.host, config.port, result));
+            self.emit('data', result);
 
-		self.emit('debug', util.format("DEBUG (received_data) Received data from %s:%s - %j", config.host, config.port, result));
-		self.emit('data', result);
+            // If the command is supported we emit it as well
+            if (typeof result.command !== 'undefined') {
+                if (Array.isArray(result.command)) {
+                    result.command.forEach(function (cmd) {
+                        self.emit(cmd, result.argument);
+                    });
+                } else {
+                    self.emit(result.command, result.argument);
+                }
+            }
 
-		// If the command is supported we emit it as well
-		if (typeof result.command !== 'undefined') {
-			if (Array.isArray(result.command)) {
-				result.command.forEach(function (cmd) {
-					self.emit(cmd, result.argument);
-				});
-			} else {
-				self.emit(result.command, result.argument);
-			}
-		}
+            data = data.slice(iscp_message.length + 21); //21 if trimming is correct?
+        }
 	});
 };
 

@@ -1,26 +1,51 @@
 {
-  "name": "eiscp",
-  "version": "0.0.1",
-  "description": "interface to onkyo receivers / eiscp protocol",
-  "main": "eiscp.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
+  "_from": "git://github.com/Borf/node-eiscp.git",
+  "_id": "eiscp@0.0.1",
+  "_inBundle": false,
+  "_integrity": "sha1-OwK6ivx8OKTRdtfyqpH3YP5CCpA=",
+  "_location": "/eiscp",
+  "_phantomChildren": {},
+  "_requested": {
     "type": "git",
-    "url": "https://github.com/tillbaks/node-eiscp"
+    "raw": "eiscp@git://github.com/Borf/node-eiscp.git",
+    "name": "eiscp",
+    "escapedName": "eiscp",
+    "rawSpec": "git://github.com/Borf/node-eiscp.git",
+    "saveSpec": "git://github.com/Borf/node-eiscp.git",
+    "fetchSpec": "git://github.com/Borf/node-eiscp.git",
+    "gitCommittish": "master"
   },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "git://github.com/Borf/node-eiscp.git#e42273cc6c63420bceadb864483df4e304e79306",
+  "_spec": "eiscp@git://github.com/Borf/node-eiscp.git",
+  "_where": "C:\\Users\\johan\\Desktop\\git\\sensorcloud\\mqtt_node",
+  "bugs": {
+    "url": "https://github.com/Borf/node-eiscp/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "async": "*",
+    "js-yaml": "*"
+  },
+  "deprecated": false,
+  "description": "interface to onkyo receivers / eiscp protocol",
+  "homepage": "https://github.com/Borf/node-eiscp#readme",
   "keywords": [
     "onkyo",
     "eiscp",
     "iscp"
   ],
   "license": "MIT License",
-  "bugs": {
-    "url": "https://github.com/tillbaks/node-eiscp/issues"
+  "main": "eiscp.js",
+  "name": "eiscp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Borf/node-eiscp.git"
   },
-  "dependencies": {
-      "async":  "*",
-      "js-yaml": "*"
-  }
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.1"
 }
