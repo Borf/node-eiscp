@@ -55,7 +55,7 @@ function eiscp_packet_extract(packet) {
       Read out the packet length from the header and trim
     */
     var length = packet.readInt32BE(8);
-    var subData = packet.toString('ascii', 18, 18+length-2).trim();
+    var subData = packet.toString('ascii', 18, 18+length-2);
     return subData;
 }
 
@@ -85,7 +85,11 @@ function iscp_to_command(iscp_message) {
                 result.argument = parseInt(value, 16);
             }
             else
-                result.argument = value;
+            {
+                result.argument = value.trim();
+                if(result.argument[result.argument.length-1] == '\x1a')
+                    result.argument = result.argument.substring(0, result.argument.length-1);
+            }
         }
     });
 
@@ -397,7 +401,7 @@ self.connect = function (options) {
                 }
             }
 
-            data = data.slice(iscp_message.length + 21); //21 if trimming is correct?
+            data = data.slice(iscp_message.length + 18); //21 if trimming is correct?
         }
 	});
 };
